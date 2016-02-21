@@ -1,16 +1,16 @@
 {
-  "name": "homebridge-milight",
-  "version": "0.1.1",
-  "description": "MiLight/LimitlessLED/Easybulb Plugin for Homebridge: https://github.com/nfarina/homebridge",
-  "author": "Sam Edwards <sam@samedwards.ca> (https://samedwards.ca/)",
+  "name": "homebridge-milight-saturation",
+  "version": "0.0.1",
+  "description": "Saturation extension to homebridge-milight: https://github.com/dotsam/homebridge-milight",
+  "author": "Marcel Laurijsse",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git://github.com/dotsam/homebridge-milight.git"
+    "url": "git://github.com/mlaurijsse/homebridge-milight-saturation.git"
   },
   "preferGlobal": true,
   "bugs": {
-    "url": "http://github.com/dotsam/homebridge-milight/issues"
+    "url": "http://github.com/mlaurijsse/homebridge-milight-saturation/issues"
   },
   "keywords": [
     "homebridge-plugin"
@@ -20,5 +20,10 @@
   },
   "dependencies": {
     "node-milight-promise": "0.0.x"
+  },
+  "homepage": "https://github.com/mlaurijsse/homebridge-milight-saturation#readme",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Nothing to test\" && exit 0"
   }
 }
