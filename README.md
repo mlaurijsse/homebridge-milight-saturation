@@ -1,4 +1,4 @@
-# homebridge-milight
+# homebridge-milight-saturation
 Saturation extension to homebridge-milight (https://github.com/dotsam/homebridge-milight). Most users would want to use the homebridge-milight plugin instead.
 
 MiLight/LimitlessLED/Easybulb Plugin for [Homebridge](https://github.com/nfarina/homebridge)
