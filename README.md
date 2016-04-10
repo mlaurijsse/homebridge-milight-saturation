@@ -13,13 +13,14 @@ Example config:
 ""platforms": [
     {
         "platform":"MiLightSat",
-        "name":"MiLightSat",
+        "name":"LED Control",
         "bridges": [
           {
-            "ip_address": "192.168.8.50",
+            "type": "uart";
+            "device": "/dev/ttyAMA0",
             "lights": [
               {
-                "name": "Woonkamer",
+                "name": "Living Room",
                 "saturation": true,
                 "zones": [
                   {"zone": 1, "function": "rgb", "type": "rgbw"},
@@ -27,14 +28,29 @@ Example config:
                 ]
               },
               {
-                "name": "Kast",
+                "name": "Hall",
                 "saturation": false,
                 "zones": [
                   {"zone": 3, "function": "rgb", "type": "rgbw"}
                 ]
               }
             ],
-            "repeat": 2,
+            "repeat": 1,
+            "delay": 0
+          },
+          {
+            "type": "wifi";
+            "ip_address": "192.168.0.10",
+            "lights": [
+              {
+                "name": "Bedroom",
+                "saturation": false,
+                "zones": [
+                  {"zone": 1, "function": "rgbw", "type": "rgbw"}
+                ]
+              }
+            ],
+            "repeat": 3,
             "delay": 50
           }
         ]
@@ -73,3 +89,6 @@ The node-milight-promise library provides additional debugging output when the M
 
 ### 0.0.1
  * Initial release
+
+### 0.0.2
+ * Added direct interface to bridge via UART

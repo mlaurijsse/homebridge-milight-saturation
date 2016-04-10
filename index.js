@@ -1,6 +1,8 @@
-var Milight = require('node-milight-promise').MilightController;
-var commands = require('node-milight-promise').commands;
+var Milight = require('milight-io').MilightController;
+var Commands = require('milight-io').commands;
+var Uart = ('milight-io').MilightUARTController;
 var Service, Characteristic;
+
 
 module.exports = function(homebridge) {
   Service = homebridge.hap.Service;
@@ -56,31 +58,33 @@ MiLightPlatform.prototype._addLights = function(bridgeConfig) {
     return;
   }
 
-/*  if (!bridgeConfig["type"]) {
-    this.log("INFO: Type not specified, defaulting to rgbw");
-    bridgeConfig["type"] = "rgbw";
-  }
-*/
 
   if (lightsLength === 0) {
     this.log("ERROR: No lights found in configuration.");
     return;
-/*  } else if (bridgeConfig["type"] == "rgb" && zonesLength > 1) {
-    this.log("WARNING: RGB lamps only have a single zone. Only the first defined zone will be used.");
-    zonesLength = 1;
-*/
   } else if (lightsLength > 4) {
     this.log("WARNING: Only a maximum of 4 zones are supported per bridge. Only recognizing the first 4 zones.");
     zonesLength = 4;
   }
 
   // Initialize a new controller to be used for all zones defined for this bridge
-  bridgeController = new Milight({
-    ip: bridgeConfig.ip_address,
-    port: bridgeConfig.port,
-    delayBetweenCommands: bridgeConfig.delay,
-    commandRepeat: bridgeConfig.repeat
-  });
+  if (bridgeConfig.type == 'uart') {
+    // We interface the bridge directly via serial port
+    bridgeController = new Uart({
+      device: bridgeConfig.device || false,
+      baudrate: bridgeConfig.baudrate || false,
+      delayBetweenCommands: bridgeConfig.delay || false,
+      commandRepeat: bridgeConfig.repeat || false
+    });
+  } else {
+    // Access bridge via UDP, if config not provide, use defaults.
+    bridgeController = new Milight({
+      ip: bridgeConfig.ip_address || false,
+      port: bridgeConfig.port || false,
+      delayBetweenCommands: bridgeConfig.delay || false,
+      commandRepeat: bridgeConfig.repeat || false
+    });
+  }
 
   // Create lamp accessories for all of the defined lights
   for (var i = 0; i < lightsLength; i++) {
@@ -156,13 +160,13 @@ MiLightAccessory.prototype.setPowerState = function(powerOn, callback) {
 
 MiLightZone.prototype.setPowerState = function(powerOn) {
   if (powerOn) {
-    this.controller.sendCommands(commands[this.type].on(this.zone));
+    this.controller.sendCommands(Commands[this.type].on(this.zone));
     // If i'm an RGBW controller used for white only, switch to whitemode
     if (this.type == "rgbw" && this.function == "white") {
-      this.controller.sendCommands(commands[this.type].whiteMode(this.zone));
+      this.controller.sendCommands(Commands[this.type].whiteMode(this.zone));
     }
   } else {
-    this.controller.sendCommands(commands[this.type].off(this.zone));
+    this.controller.sendCommands(Commands[this.type].off(this.zone));
   }
 };
 
@@ -216,14 +220,14 @@ MiLightZone.prototype.setIntensity = function(brightness, saturation) {
 
   if (intensity === 0) {
     // If intensity is set to 0, turn off the lamp
-    this.controller.sendCommands(commands[this.type].off(this.zone));
+    this.controller.sendCommands(Commands[this.type].off(this.zone));
 
   } else {
     // Send on command to ensure we're addressing the right bulb
-    this.controller.sendCommands(commands[this.type].on(this.zone));
+    this.controller.sendCommands(Commands[this.type].on(this.zone));
 
     // And set correct intensity
-    this.controller.sendCommands(commands[this.type].brightness(intensity));
+    this.controller.sendCommands(Commands[this.type].brightness(intensity));
   }
 };
 
@@ -246,11 +250,11 @@ MiLightZone.prototype.setHue = function(value, callback) {
   if (this.function == "rgb" || this.function == "rgbw") {
 
     // Transform to MiLight color
-    var hue = commands.rgbw.hsvToMilightColor(Array(value, 0, 0));
+    var hue = Commands.rgbw.hsvToMilightColor(Array(value, 0, 0));
 
     // Send on command to ensure we're addressing the right bulb
-    this.controller.sendCommands(commands[this.type].on(this.zone));
-    this.controller.sendCommands(commands[this.type].hue(hue));
+    this.controller.sendCommands(Commands[this.type].on(this.zone));
+    this.controller.sendCommands(Commands[this.type].hue(hue));
   }
 };
 

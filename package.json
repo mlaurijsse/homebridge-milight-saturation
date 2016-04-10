@@ -1,6 +1,6 @@
 {
   "name": "homebridge-milight-saturation",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Saturation extension to homebridge-milight: https://github.com/dotsam/homebridge-milight",
   "author": "Marcel Laurijsse",
   "license": "MIT",
@@ -19,7 +19,7 @@
     "homebridge": ">=0.2.0"
   },
   "dependencies": {
-    "node-milight-promise": "0.0.x"
+    "milight-io": "https://github.com/mlaurijsse/node-milight-io"
   },
   "homepage": "https://github.com/mlaurijsse/homebridge-milight-saturation#readme",
   "main": "index.js",
