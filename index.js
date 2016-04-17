@@ -1,6 +1,6 @@
 var Milight = require('milight-io').MilightController;
 var Commands = require('milight-io').commands;
-var Uart = ('milight-io').MilightUARTController;
+var Uart = require('milight-io').MilightUARTController;
 var Service, Characteristic;
 
 
